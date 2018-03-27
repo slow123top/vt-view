@@ -18,9 +18,16 @@
             </template>
           </el-input>
         </el-form-item>
+        <el-form-item prop="userType">
+          <el-radio-group v-model="formData.userType">
+            <el-radio label="0">管理员</el-radio>
+            <el-radio label="1">普通用户</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('loginForm')" style="width: 100%">登录</el-button>
-          <!--<el-button @click="resetForm('ruleForm')">重置</el-button>-->
+          <router-link to="/register">没有账户？立即注册</router-link>
+          <router-link to="/register" style="margin-left: 30%">忘记密码？</router-link>
         </el-form-item>
       </el-form>
     </i-col>
@@ -35,7 +42,8 @@
       return {
         formData: {
           username: '',
-          password: ''
+          password: '',
+          userType: '0'
         },
         formRule: {
           username: [
@@ -58,7 +66,8 @@
 //            校验成功  登录
             login({
               username: this.formData.username,
-              password: this.formData.password
+              password: this.formData.password,
+              userType: this.formData.userType
             }).then(res => {
               if (res.data.status === 'SUCCESS') {
                 this.$store.dispatch('login', {
@@ -108,6 +117,7 @@
     border-radius: .5rem;
     background-color: #fff;
     padding: 1rem;
+    text-align: center;
   }
 
   h1 {

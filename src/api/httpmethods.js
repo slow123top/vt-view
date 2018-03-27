@@ -7,7 +7,7 @@ function toQs (param) {
 }
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
     // 'Access-Control-Allow-Origin': '*'
@@ -87,6 +87,10 @@ export const checkToken = () => {
 // 注册
 export const register = (param) => {
   return postRemoteReqTodo('/register', param)
+}
+// 校验用户是否存在
+export const validateUsername = (param) => {
+  return postRemoteReqTodo('/validateUsername', param)
 }
 // 监听分支节点状态
 export const listenSite = (param) => {

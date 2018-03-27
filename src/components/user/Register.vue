@@ -7,7 +7,6 @@
         <hr>
         <el-form-item prop="username" label="用户名">
           <el-input v-model="formData.username" placeholder="请输入用户名">
-
           </el-input>
         </el-form-item>
         <el-form-item prop="password" label="密码">
@@ -19,24 +18,48 @@
           </el-input>
         </el-form-item>
         <el-form-item class="register-form-button">
-          <el-button type="primary" @click="submitForm('registerForm')">立即注册</el-button>
-          <el-button @click="resetForm('registerForm')">重置</el-button>
+          <el-button type="primary" @click="submitForm('registerForm')" style="width: 100%">注册</el-button>
+        </el-form-item>
+        <el-form-item class="register-form-button">
+          <el-button type="danger" @click="resetForm('registerForm')" style="width: 100%">重置</el-button>
+        </el-form-item>
+        <el-form-item>
+          <router-link to="/login">已有账户登录</router-link>
         </el-form-item>
       </el-form>
     </i-col>
   </Row>
 </template>
 <script>
-  import { register } from '../../api/httpmethods'
+  import { register, validateUsername } from '../../api/httpmethods'
 
   export default {
     name: 'register',
     data () {
+      let validateUser = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入用户名'))
+        } else if (value.length < 3 || value.length > 20) {
+          callback(new Error('用户名长度3-20位'))
+        } else if (!/^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/.test(value)) {
+          callback(new Error('用户名支持数字和字母和特殊符号至少2种'))
+        } else {
+          validateUsername({
+            username: value
+          }).then(res => {
+            if (res.data.status === 'ERROR') {
+              callback(new Error(res.data.message))
+            } else {
+              callback()
+            }
+          })
+        }
+      }
       let validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'))
         } else if (value.length < 3 || value.length > 20) {
-          callback(new Error('密码3-20位'))
+          callback(new Error('密码长度3-20位'))
         } else if (!/^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/.test(value)) {
           callback(new Error('密码支持数字和字母和特殊符号至少2种'))
         } else {
@@ -59,12 +82,15 @@
         formData: {
           username: '',
           password: '',
-          checkPassword: ''
+          checkPassword: '',
+          userType: ''
         },
         formRule: {
           username: [
-            {required: true, message: '用户名不能为空', trigger: 'blur'},
-            {min: 3, max: 20, message: '长度不超过20个字符', trigger: 'blur'}
+            {
+              validator: validateUser,
+              trigger: 'blur'
+            }
           ],
           password: [
             {validator: validatePass, trigger: 'blur'}
@@ -83,7 +109,8 @@
             register({
               username: this.formData.username,
               password: this.formData.password,
-              checkPassword: this.formData.checkPassword
+              checkPassword: this.formData.checkPassword,
+              userType: '1'
             }).then(res => {
               if (res.data.status === 'SUCCESS') {
                 this.$message.success(res.data.message)
