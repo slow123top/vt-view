@@ -47,7 +47,7 @@
       return {
         tableData: [],
         currentTableData: [],
-        pageSize: 10,
+        pageSize: 15,
         currentPage: 1
       }
     },

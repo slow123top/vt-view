@@ -9,9 +9,11 @@ import Login from '@/components/user/Login'
 import Register from '@/components/user/Register'
 import Scs from '@/components/star_search/Scs'
 import Global from '@/components/star_search/Global'
+// 普通用户
+import CommonResource from '@/components/common/resource'
+import Person from '@/components/common/person'
 
 Vue.use(Router)
-
 const router = new Router({
   mode: 'history',
   routes: [
@@ -70,6 +72,29 @@ const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/common/:id',
+      name: 'commonresource',
+      component: CommonResource,
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个此路由是需要登录的
+      },
+      children: [
+        {
+          path: 'summary',
+          meta: {
+            requireAuth: true // 添加该字段，表示进入这个此路由是需要登录的
+          },
+          name: 'ResourceSummary',
+          component: ResourceSummary
+        },
+        {
+          path: 'person',
+          name: 'commonperson',
+          component: Person
+        }
+      ]
     }
   ]
 })

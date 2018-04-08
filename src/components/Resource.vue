@@ -1,56 +1,52 @@
 <template>
-  <Row type="flex" jusitfy="center">
-    <i-col :span="spanLeft" class="left">
-      <el-menu class="left-menu" default-active="1-4-1" :collapse="isCollapse"
-               background-color="#545c64"
-               text-color="#fff" active-text-color="#ffd04b" @select="changeIndex">
-        <el-menu-item index="resource-summary">
-          <i class="el-icon-location"></i>
-          <span slot="title">资源总表</span>
-        </el-menu-item>
-        <el-submenu index="2">
-          <template slot="title">
+    <Row type="flex" jusitfy="center">
+      <i-col :span="spanLeft" class="left">
+        <el-menu class="left-menu" default-active="1-4-1" :collapse="isCollapse"
+                 background-color="#545c64"
+                 text-color="#fff" active-text-color="#ffd04b" @select="changeIndex">
+          <el-menu-item index="resource-summary">
             <i class="el-icon-location"></i>
-            <span>星表检索</span>
-          </template>
-          <el-menu-item index="search-global">
-            <i class="el-icon-search"></i>
-            <span>组合检索</span>
+            <span slot="title">资源总表</span>
           </el-menu-item>
-          <el-menu-item index="search-scs">
-            <i class="el-icon-search"></i>
-            <span>锥形检索</span>
-          </el-menu-item>
-        </el-submenu>
-        <el-submenu index="3">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>站点管理</span>
-          </template>
-          <el-menu-item index="status-listen">
-            <i class="el-icon-search"></i>
-            <span>状态监听</span>
-          </el-menu-item>
-          <el-menu-item index="file-upload">
-            <i class="el-icon-search"></i>
-            <span>文件上传</span>
-          </el-menu-item>
-          <!--<el-menu-item index="2-3">选项3</el-menu-item>-->
-        </el-submenu>
-      </el-menu>
-    </i-col>
-    <i-col :span="spanRight">
-      <right-header @toggleClick="toggle"></right-header>
-      <Row type="flex" jusitfy="center">
-        <i-col :span="24" class="main-right-bottom">
-          <router-view></router-view>
-        </i-col>
-      </Row>
-    </i-col>
-    <!--<i-col :span="24">-->
-    <!--<div id="chartShip" style="width: 1900px;height: 800px"></div>-->
-    <!--</i-col>-->
-  </Row>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>星表检索</span>
+            </template>
+            <el-menu-item index="search-global">
+              <i class="el-icon-search"></i>
+              <span>组合检索</span>
+            </el-menu-item>
+            <el-menu-item index="search-scs">
+              <i class="el-icon-search"></i>
+              <span>锥形检索</span>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>站点管理</span>
+            </template>
+            <el-menu-item index="status-listen">
+              <i class="el-icon-search"></i>
+              <span>状态监听</span>
+            </el-menu-item>
+            <el-menu-item index="file-upload">
+              <i class="el-icon-search"></i>
+              <span>文件上传</span>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </i-col>
+      <i-col :span="spanRight">
+        <right-header @toggleClick="toggle"></right-header>
+        <Row type="flex" jusitfy="center">
+          <i-col :span="24" class="main-right-bottom">
+            <router-view></router-view>
+          </i-col>
+        </Row>
+      </i-col>
+    </Row>
 </template>
 
 <script>
@@ -80,6 +76,7 @@
       })
     },
     mounted () {
+      console.log(this.$store.state.userType)
     },
     data () {
       return {

@@ -110,7 +110,7 @@
               username: this.formData.username,
               password: this.formData.password,
               checkPassword: this.formData.checkPassword,
-              userType: '1'
+              userType: '0'
             }).then(res => {
               if (res.data.status === 'SUCCESS') {
                 this.$message.success(res.data.message)

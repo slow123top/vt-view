@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const state = {
   sitesInfo: [],
   token: null,
-  username: ''
+  username: '',
+  userType: '1'
 }
 export default new Vuex.Store({
   state,

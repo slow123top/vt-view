@@ -72,12 +72,16 @@
               if (res.data.status === 'SUCCESS') {
                 this.$store.dispatch('login', {
                   username: res.data.username,
-                  token: res.data.token
+                  token: res.data.token,
+                  userType: res.data.type
                 })
+                if (Number(res.data.type)) {
+                  this.$router.push('/common/foo/summary')
+                } else {
+                  this.$router.push('/resource/foo/summary')
+                }
                 this.$message.success(res.data.message)
-                this.$router.push('/resource/foo/summary')
               } else if (res.data.status === 'ERROR') {
-                console.log('adsa')
                 this.$message.error(res.data.message)
               }
             })
