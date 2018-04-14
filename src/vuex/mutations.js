@@ -4,10 +4,13 @@ const mutations = {
   [types.LOGIN] (state, payload) {
     //  登录成功  客户端保存token
     localStorage.setItem('token', payload.token)
-    state.token = payload.token
     localStorage.setItem('username', payload.username)
+    state.token = payload.token
     state.username = payload.username
     state.userType = payload.userType
+    state.avatarAddr = payload.avatarAddr
+    state.introduction = payload.introduction
+    state.career = payload.career
   },
   [types.LOGOUT] (state, payload) {
     localStorage.removeItem('token')

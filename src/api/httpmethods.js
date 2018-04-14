@@ -8,6 +8,7 @@ function toQs (param) {
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8000',
+  // baseURL: 'http://192.168.11.8:8083',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
     // 'Access-Control-Allow-Origin': '*'
@@ -50,7 +51,6 @@ axiosInstance.interceptors.response.use(
         })
       }
     }
-
     return response
   },
   err => {
@@ -83,6 +83,10 @@ export const login = (param) => {
 // 检验token是否过期
 export const checkToken = () => {
   return getRemoteReqTodo('/check', [], [])
+}
+// 获取用户信息 用户名 用户类型  头像 职业  个人介绍等
+export const getUserInfo = (param) => {
+  return postRemoteReqTodo('/getUserInfo', param)
 }
 // 注册
 export const register = (param) => {

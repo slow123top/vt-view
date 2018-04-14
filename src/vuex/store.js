@@ -9,8 +9,11 @@ Vue.use(Vuex)
 const state = {
   sitesInfo: [],
   token: null,
-  username: '',
-  userType: '1'
+  username: localStorage.getItem('username'),
+  userType: '1',
+  avatarAddr: '',
+  career: '',
+  introduction: ''
 }
 export default new Vuex.Store({
   state,

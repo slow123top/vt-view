@@ -8,7 +8,6 @@ const actions = {
         if (res.data['status'] === 'ERROR') {
           reject(res.data['message'])
         } else {
-          console.log(res.data)
           commit(types.SITEDETAIL, {data: res.data})
           resolve()
         }

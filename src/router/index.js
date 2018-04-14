@@ -12,11 +12,17 @@ import Global from '@/components/star_search/Global'
 // 普通用户
 import CommonResource from '@/components/common/resource'
 import Person from '@/components/common/person'
+import Index from '@/components/index'
 
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/index',
+      name: 'index',
+      component: Index
+    },
     {
       path: '/resource/:id',
       name: 'resource',

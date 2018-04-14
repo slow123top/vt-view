@@ -69,25 +69,26 @@
               password: this.formData.password,
               userType: this.formData.userType
             }).then(res => {
-              if (res.data.status === 'SUCCESS') {
+              let data = res.data
+              if (data.status === 'SUCCESS') {
                 this.$store.dispatch('login', {
-                  username: res.data.username,
-                  token: res.data.token,
-                  userType: res.data.type
+                  username: data.username,
+                  type: data.type,
+                  token: data.token,
+                  avatarAddr: data.avatarAddr,
+                  introduction: data.introduction,
+                  career: data.career
                 })
-                if (Number(res.data.type)) {
-                  this.$router.push('/common/foo/summary')
-                } else {
+                if (!Number(data.type)) {
                   this.$router.push('/resource/foo/summary')
+                } else {
+                  this.$router.push('/common/foo/summary')
                 }
-                this.$message.success(res.data.message)
-              } else if (res.data.status === 'ERROR') {
-                this.$message.error(res.data.message)
+                this.$message.success(data.message)
+              } else if (data.status === 'ERROR') {
+                this.$message.error(data.message)
               }
             })
-              .catch(e => {
-                this.$message.error(e)
-              })
           }
         })
       }

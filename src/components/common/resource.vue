@@ -46,7 +46,7 @@
 
         <Dropdown trigger="click" class="common-right-top-dropdown" @on-click="selectPersonAttr">
           <a href="javascript:void(0)">
-            <Avatar src=""/>
+            <Avatar :src="$store.state.avatarAddr"/>
             <span class="common-user-name">{{ $store.state.username }}</span>
             <Icon type="arrow-down-b"></Icon>
           </a>
@@ -67,27 +67,41 @@
 </template>
 
 <script>
-  import { checkToken } from '../../api/httpmethods'
+  import { checkToken, getUserInfo } from '../../api/httpmethods'
 
   export default {
     name: 'resource',
     beforeCreate () {
 //      主页刷新时，如果服务器设置的token时效到了   就会给出重新登录的提示
-      checkToken().then(res => {
-        if (res.data.error) {
-          this.$store.dispatch('logout')
-          this.$message.error(res.data.error)
-          return false
-        } else {
+      new Promise((resolve, reject) => {
+        checkToken().then(res => {
+          if (res.data.error) {
+            this.$store.dispatch('logout')
+            this.$message.error(res.data.error)
+            return false
+          } else {
+            resolve()
+          }
+        })
+      }).then(() => {
+        getUserInfo({
+          username: localStorage.getItem('username')
+        }).then(res => {
+          let data = res.data.data
           this.$store.dispatch('login', {
-            username: localStorage.getItem('username'),
-            token: localStorage.getItem('token')
+            username: data.username,
+            type: data.type,
+            token: data.token,
+            avatarAddr: data.avatarAddr,
+            introduction: data.introduction,
+            career: data.career
           })
-        }
-      }).catch(e => {
-        this.$message.error(e)
-        return false
+        })
       })
+        .catch(e => {
+          this.$message.error(e)
+          return false
+        })
     },
     data () {
       return {}
