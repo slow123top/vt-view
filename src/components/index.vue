@@ -18,24 +18,6 @@
     font-size: 1rem;
   }
 
-  .text {
-    font-size: 14px;
-  }
-
-  .el-tag {
-    margin-left: 5px;
-    margin-top: 5px;
-  }
-
-  .button-new-tag {
-    margin-left: 5px;
-    margin-top: 5px;
-    height: 32px;
-    line-height: 30px;
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
   .input-new-tag {
     width: 90px;
     margin-left: 10px;
@@ -43,23 +25,31 @@
   }
 </style>
 <template>
-  <el-row style="background-color:rgba(0,0,0,0);padding: 1rem;height: 1000px" type="flex" justify="space-between">
-    <el-col :span="6" style="background-color: rgba(0,0,0,0.1);padding:.5rem 1rem;height: 100%;border-radius: 10px">
-      <el-input placeholder="请输入内容" v-model="word" class="input-with-select">
-        <el-button type="primary" @click="search" slot="append" icon="el-icon-search"></el-button>
-      </el-input>
-      <el-card class="box-card">
+  <el-row style="background-color:rgba(0,0,0,0);padding: 1rem;height: 1000px" type="flex" justify="center">
+    <el-col :span="10"
+            style="background-color: rgba(30,144,255,0.5);padding:0 1rem 4rem 1rem;height: 100%;border-radius: 10px">
+      <div style="text-align: left"><img src="../img/word2.png" alt="措辞助手" style="width: 4rem"/></div>
+      <!--<div style="width: 5rem;height: 5rem;background-image: url('http://localhost:8000/images/word.png');background-position: center"></div>-->
+      <h2>文字措辞助手</h2>
+      <textarea ref="textArea" v-model="textareaText" @click="search"
+                style="height: 90%;width: 90%;font-size: 1rem"></textarea>
+      <h3 style="text-align: left">操作提示：对文本框里面的文本使用鼠标滑动取词，当鼠标抬起时，若该词存在同义词或上位词或下位词，这些词汇将出现在右侧相应的栏目中；
+        反之，会提示“无相关词汇”。当点击这些相关词汇时，滑动所取词语将被该词汇替换。</h3>
+    </el-col>
+    <el-col :span="7" :offset="1"
+            style="background-color: rgba(30,144,255,0.5);padding:2rem 1rem;height: 100%;border-radius: 10px">
+      <el-card class="box-card" :body-style="bodyStyle">
         <div slot="header" class="clearfix">
           <span>同义词</span>
         </div>
-        <el-tag
-          :key="tag"
-          v-for="(tag,index) in tongYiCi"
-          closable
-          :disable-transitions="false"
-          @close="handleTongYiCiClose(tag)">
+        <el-button type="primary"
+                   :key="tag"
+                   size="mini"
+                   v-for="(tag,index) in tongYiCi"
+                   @click="replaceWord(tag)"
+                   style="margin-top: 5px">
           {{tag}}
-        </el-tag>
+        </el-button>
         <el-input
           class="input-new-tag"
           v-if="tongYiCiInputVisible"
@@ -69,20 +59,19 @@
           @blur="handleTongYiCiInputConfirm"
         >
         </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showTongYiCiInput">+新建同义词</el-button>
       </el-card>
-      <el-card class="box-card">
+      <el-card class="box-card" :body-style="bodyStyle">
         <div slot="header" class="clearfix">
           <span>上位词</span>
         </div>
-        <el-tag
-          :key="tag"
-          v-for="(tag,index) in shangWeiCi"
-          closable
-          :disable-transitions="false"
-          @close="handleShangWeiCiClose(tag)">
+        <el-button type="success"
+                   :key="tag"
+                   size="mini"
+                   v-for="(tag,index) in shangWeiCi"
+                   @click="replaceWord(tag)"
+                   style="margin-top: 5px">
           {{tag}}
-        </el-tag>
+        </el-button>
         <el-input
           class="input-new-tag"
           v-if="shangWeiCiInputVisible"
@@ -92,20 +81,19 @@
           @blur="handleShangWeiCiInputConfirm"
         >
         </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showShangWeiCiInput">+新建上位词</el-button>
       </el-card>
-      <el-card class="box-card">
+      <el-card class="box-card" :body-style="bodyStyle">
         <div slot="header" class="clearfix">
           <span>下位词</span>
         </div>
-        <el-tag
-          :key="tag"
-          v-for="(tag,index) in xiaWeiCi"
-          closable
-          :disable-transitions="false"
-          @close="handleXiaWeiCiClose(tag)">
+        <el-button type="warning"
+                   :key="tag"
+                   size="mini"
+                   v-for="(tag,index) in xiaWeiCi"
+                   @click="replaceWord(tag)"
+                   style="margin-top: 5px">
           {{tag}}
-        </el-tag>
+        </el-button>
         <el-input
           class="input-new-tag"
           v-if="xiaWeiCiInputVisible"
@@ -115,12 +103,7 @@
           @blur="handleXiaWeiCiInputConfirm"
         >
         </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showXiaWeiCiInput">+新建下位词</el-button>
       </el-card>
-    </el-col>
-    <el-col :span="17" style="background-color: rgba(0,0,0,0.1);padding:.5rem;height: 100%;border-radius: 10px">
-      <div id="container" style="height: 100%"></div>
-      <!--<force :nodes="nodes" :links="links"></force>-->
     </el-col>
   </el-row>
 
@@ -148,63 +131,18 @@
         links: [],
         tongYiCiValue: '',
         shangWeiCiValue: '',
-        xiaWeiCiValue: ''
+        xiaWeiCiValue: '',
+        wordRange: '',
+        textareaText: '',
+        selectStart: 0,
+        selectEnd: 0,
+        bodyStyle: {
+          height: '200px',
+          overflow: 'auto'
+        }
       }
     },
-    beforeDestroy: function () {
-
-    },
     methods: {
-      getNodesIndex (arr, ele) {
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].name === ele) {
-            return i
-          }
-        }
-      },
-      getLinksIndex (arr, ele, wordType) {
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].target === ele && arr[i].value === wordType) {
-            return i
-          }
-        }
-      },
-      handleTongYiCiClose (tag) {
-        this.tongYiCi.splice(this.tongYiCi.indexOf(tag), 1)
-        this.nodes.splice(this.getNodesIndex(this.nodes, tag), 1)
-        this.links.splice(this.getLinksIndex(this.links, tag, '同义词'), 1)
-        this.draw(this.nodes, this.links)
-      },
-      handleShangWeiCiClose (tag) {
-        this.shangWeiCi.splice(this.shangWeiCi.indexOf(tag), 1)
-        this.nodes.splice(this.getNodesIndex(this.nodes, tag), 1)
-        this.links.splice(this.getLinksIndex(this.links, tag, '上位词'), 1)
-        this.draw(this.nodes, this.links)
-      },
-      handleXiaWeiCiClose (tag) {
-        this.xiaWeiCi.splice(this.xiaWeiCi.indexOf(tag), 1)
-        this.nodes.splice(this.getNodesIndex(this.nodes, tag), 1)
-        this.links.splice(this.getLinksIndex(this.links, tag, '下位词'), 1)
-        this.draw(this.nodes, this.links)
-      },
-      showTongYiCiInput () {
-        this.tongYiCiInputVisible = true
-        this.$nextTick(_ => {
-          this.$refs.tongYiCiSaveTagInput.$refs.input.focus()
-        })
-      },
-      showShangWeiCiInput () {
-        this.shangWeiCiInputVisible = true
-        this.$nextTick(_ => {
-          this.$refs.shangWeiCiSaveTagInput.$refs.input.focus()
-        })
-      },
-      showXiaWeiCiInput () {
-        this.xiaWeiCiInputVisible = true
-        this.$nextTick(_ => {
-          this.$refs.xiaWeiCiSaveTagInput.$refs.input.focus()
-        })
-      },
       handleTongYiCiInputConfirm () {
         if (this.tongYiCiValue) {
           this.tongYiCi.push(this.tongYiCiValue)
@@ -323,20 +261,48 @@
           this.xiaWeiCiInputVisible = false
         }
       },
+      replaceWord: function (tag) {
+        this.textareaText = `${this.textareaText.substring(0, this.selectStart)}${tag}${this.textareaText.substring(this.selectEnd)}`
+        this.selectEnd = this.selectStart + tag.length
+      },
       search: function () {
-        this.nodes.splice(0, this.nodes.length)
-        getRemoteReqTodo('/getwordinfo', ['word'], [this.word])
+        // 获取文本域
+        if (this.textareaText === '') {
+          return false
+        }
+        let that = this.$refs.textArea
+        let nullvalue = -1
+        let selectStart
+        let selectEnd
+        // let position
+        // let selectText
+        // let text = this.textareaText
+        selectStart = that.selectionStart
+        selectEnd = that.selectionEnd
+        if (selectStart === selectEnd) {
+          // position = that.selectionStart
+          selectStart = nullvalue
+          selectEnd = nullvalue
+        } else {
+          // position = nullvalue
+        }
+        this.selectStart = selectStart
+        this.selectEnd = selectEnd
+        // selectText = text.substring(selectStart, selectEnd)
+        // console.log(selectStart)
+        // console.log(selectEnd)
+        // this.nodes.splice(0, this.nodes.length)
+        getRemoteReqTodo('/getwordinfo', ['word'], [window.getSelection().toString()])
           .then(response => {
             let data = response.data
-            let nodes = response.data.graphResponse.nodes
-            let links = response.data.graphResponse.links
-            this.nodes = nodes
-            this.links = links
+            if (data.state === 'ERROR') {
+              this.$message.warning('无相关词汇')
+              return false
+            }
             this.tongYiCi = data.tongyici
             this.shangWeiCi = data.shangweici
             this.xiaWeiCi = data.xiaweici
-            this.draw(this.nodes, this.links)
-            console.log(this.nodes)
+            // this.draw(this.nodes, this.links
           })
       },
       draw: function (nodes, links) {
@@ -381,7 +347,7 @@
           },
           tooltip: {},
           legend: [{
-            // selectedMode: 'single',
+            top: '10%',
             data: categories.map(function (a) {
               return a.name
             })
@@ -406,7 +372,6 @@
             }
           ]
         }
-
         myChart.setOption(option)
       }
     }

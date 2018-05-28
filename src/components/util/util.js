@@ -1,1 +1,1 @@
-export const fileTypeName = ['其他文件', '星表文件', '天文文献', '光谱文件']
+export const fileTypeName = ['其他文件', 'star file', 'astronomical literature', 'spectral file']

@@ -90,7 +90,21 @@
       },
       handSuccess (response, file, fileList) {
         if (response.status === 'SUCCESS') {
+          this.$message.success(response.message)
           this.avatarAddr = `http://localhost:8000/images/${file.name}`
+          getUserInfo({
+            username: localStorage.getItem('username')
+          }).then(res => {
+            let data = res.data.data
+            this.$store.dispatch('login', {
+              username: data.username,
+              type: data.type,
+              token: data.token,
+              avatarAddr: data.avatarAddr,
+              introduction: data.introduction,
+              career: data.career
+            })
+          })
         }
       }
     },

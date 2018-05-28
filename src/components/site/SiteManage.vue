@@ -8,7 +8,7 @@
           <!--<el-button type="danger" size="small">关闭</el-button>-->
         </div>
         <div>
-          状态：<span class="card-status">{{sitesStatus[index]}}</span>
+          状态：<span class="card-status">运行中...</span>
         </div>
       </el-card>
     </i-col>

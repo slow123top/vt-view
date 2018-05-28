@@ -7,8 +7,9 @@ function toQs (param) {
 }
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000',
-  // baseURL: 'http://192.168.11.8:8083',
+  // baseURL: 'http://localhost:8000',
+  baseURL: 'http://219.231.164.34:8083',
+  // baseURL: '',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
     // 'Access-Control-Allow-Origin': '*'
@@ -112,4 +113,8 @@ export const deleteFile = (param) => {
 // 锥形检索
 export const scsSearch = (param) => {
   return postRemoteReqTodo('/scs', param)
+}
+// 全局检索星表信息
+export const globalSearch = (params, values) => {
+  return getRemoteReqTodo('/global', params, values)
 }

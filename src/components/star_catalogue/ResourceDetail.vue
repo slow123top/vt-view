@@ -2,10 +2,10 @@
   <el-row type="flex" jusitfy="center">
     <el-col :span="24">
       <div style="float: left">
-        <h2>站点：{{siteName}}</h2>
+        <h2>SITE：{{siteName}}</h2>
       </div>
       <div style="float: right">
-        <el-select size="large" v-model="search" filterable placeholder="请输入要查找的文件名" :clearable="true"
+        <el-select size="large" v-model="search" filterable placeholder="please input file name" :clearable="true"
                    @change="changeFilterData" @clear="clearFilterData"
                    style="width: 30rem">
           <el-option
@@ -19,11 +19,11 @@
       <el-table ref="table" :data="currentTableData" @selection-change="selectChange">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column type="index" width="50" align="center"></el-table-column>
-        <el-table-column prop="resName" label="资源名称" align="center"></el-table-column>
-        <el-table-column prop="mainName" label="备注" align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column prop="resName" label="resource name" align="center"></el-table-column>
+        <el-table-column prop="mainName" label="note" align="center"></el-table-column>
+        <el-table-column label="opreation" align="center">
           <template slot-scope="scope">
-            <el-tooltip effect="dark" content="下载" placement="right">
+            <el-tooltip effect="dark" content="download" placement="right">
               <i-button type="text" size="small">
                 <Icon type="arrow-down-a" size="20"></Icon>
               </i-button>
@@ -33,13 +33,13 @@
       </el-table>
       <div style="margin: 10px;overflow: hidden">
         <div style="float: left;">
-          <el-tooltip effect="dark" content="删除后将不可恢复，请谨慎操作" placement="top">
-            <el-button type="danger" icon="el-icon-delete" size="small" :disabled="isDelete" @click="deleteFile">删除
+          <el-tooltip effect="dark" content="cannot be restored after deletion, please exercise caution" placement="top">
+            <el-button type="danger" icon="el-icon-delete" size="small" :disabled="isDelete" @click="deleteFile">delete
             </el-button>
           </el-tooltip>
         </div>
         <div style="float: right;">
-          <el-pagination layout="total,prev, pager, next" :page-size="pageSize" :current-page.sync="currentPage"
+          <el-pagination layout="prev, pager, next" :page-size="pageSize" :current-page.sync="currentPage"
                          :total="tableData.length" @current-change="changePage"></el-pagination>
         </div>
       </div>
@@ -131,10 +131,9 @@
             siteName: this.siteName,
             files: this.selectedSitesInfo
           }).then((res) => {
-            console.log(res)
             let data = res.data
             if (data.status === 'SUCCESS') {
-              this.$message.error(data.message)
+              this.$message.success(data.message)
               resolve()
             } else if (data.status === 'ERROR') {
 

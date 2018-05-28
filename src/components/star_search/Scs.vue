@@ -21,23 +21,17 @@
       <el-table ref="table" :data="currentTableData" @selection-change="selectChange">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column type="index" width="50" align="center"></el-table-column>
-        <el-table-column prop="resName" label="资源名称" align="center"></el-table-column>
-        <el-table-column prop="mainName" label="备注" align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-tooltip effect="dark" content="下载" placement="right">
-              <i-button type="text" size="small">
-                <Icon type="arrow-down-a" size="20"></Icon>
-              </i-button>
-            </el-tooltip>
-          </template>
-        </el-table-column>
+        <el-table-column prop="HIP" label="HIP" align="center"></el-table-column>
+        <el-table-column prop="TYC2" label="TYC2" align="center"></el-table-column>
+        <el-table-column prop="SolID" label="SolID" align="center"></el-table-column>
+        <el-table-column prop="Source" label="Source" align="center"></el-table-column>
+        <el-table-column prop="DEdeg" label="DEdeg" align="center"></el-table-column>
+        <el-table-column prop="RAdeg" label="RAdeg" align="center"></el-table-column>
       </el-table>
     </i-col>
   </Row>
 </template>
 <script>
-  //  import { sites } from '../util/siteinfo'
   import { scsSearch } from '../../api/httpmethods'
 
   export default {
@@ -62,6 +56,7 @@
           de: this.formData.de,
           radius: this.formData.radius
         }).then(res => {
+          this.currentTableData = res.data.data
           console.log(res)
         })
       },

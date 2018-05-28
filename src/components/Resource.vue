@@ -40,7 +40,7 @@
       </i-col>
       <i-col :span="spanRight">
         <right-header @toggleClick="toggle"></right-header>
-        <Row type="flex" jusitfy="center">
+        <Row type="flex" jusitfy="start">
           <i-col :span="24" class="main-right-bottom">
             <router-view></router-view>
           </i-col>

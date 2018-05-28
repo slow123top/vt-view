@@ -13,7 +13,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="mainName" label="备注" align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="operation" align="center">
           <template slot-scope="scope">
             <router-link :to="{path:'/resource/foo/detail',query:{index:scope.$index+(currentPage - 1) * pageSize}}"
                          target="_blank">
@@ -39,6 +39,7 @@
       this.$store.dispatch('getSiteInfo').then(() => {
         this.tableData = [...this.$store.state.sitesInfo]
         this.currentTableData = [...this.getCurrentTableData()]
+        console.log(this.currentTableData)
       }).catch(e => {
         this.$message.error(e)
       })

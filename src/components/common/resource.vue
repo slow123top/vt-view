@@ -56,7 +56,6 @@
           </DropdownMenu>
         </Dropdown>
       </i-col>
-
     </Row>
     <Row type="flex" justify="center" class="common-resource-header">
       <i-col :span="10">
